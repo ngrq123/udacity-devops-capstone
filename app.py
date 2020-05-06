@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, render_template
 from flask.logging import create_logger
 import requests
 import logging
@@ -53,7 +53,7 @@ def getBalances(transaction_requests):
                     if fromCurrency in balances:
                         # Assume currency is EUR, get USD-EUR rate
                         rate = getRate(targetCurrency, fromCurrency)
-                        LOG.info('Rate: 1' + targetCurrency + ' = ' + str(rate) + fromCurrency)
+                        LOG.info('Rate: 1 %s = %s %s', targetCurrency, str(rate), fromCurrency)
                         # Get EUR needed
                         fromAmount = currTargetBalance * rate
                         if fromAmount <= balances[fromCurrency]:
@@ -95,10 +95,10 @@ def calculate():
         ','.join(['DEPOSIT', form_dict['gbp-amt'], 'GBP']),
         ','.join(['WITHDRAW', form_dict['withdrawal-amt'], form_dict['withdrawal-currency']])
     ]
-    LOG.info('Transaction requests: ' + str(transaction_requests))
+    LOG.info('Transaction requests: %s', str(transaction_requests))
     # Attempt withdrawal
     balances = getBalances(transaction_requests)
-    LOG.info('Balances after withdrawal: ' + str(balances))
+    LOG.info('Balances after withdrawal: %s', str(balances))
     # Check if withdrawal is successful
     success = float(form_dict['usd-amt']) != float(balances['USD']) or \
                 float(form_dict['eur-amt']) != float(balances['EUR']) or \
