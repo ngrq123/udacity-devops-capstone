@@ -12,13 +12,13 @@ def getRate(targetCurrency, fromCurrency):
     if targetCurrency == fromCurrency:
         return 1
 
-    url = 'https://api.exchangeratesapi.io/latest?base=' + fromCurrency + '&symbols=' + targetCurrency
+    url = 'https://api.exchangeratesapi.io/latest?base=' + targetCurrency + '&symbols=' + fromCurrency
     
     tries = 3
     while tries > 0:
         result = requests.get(url)
         if result.status_code == 200:
-            return result.json()['rates'][targetCurrency]
+            return result.json()['rates'][fromCurrency]
         tries -= 1
     return 1 # Arbitrary exchange rate, returns only if the API is down
 
@@ -50,12 +50,10 @@ def getBalances(transaction_requests):
                 currTargetBalance = targetAmount - balances[targetCurrency]
                 balances[targetCurrency] = 0
                 for fromCurrency in currencies:
-                    LOG.info(str(balances))
-                    LOG.info(fromCurrency)
                     if fromCurrency in balances:
                         # Assume currency is EUR, get USD-EUR rate
                         rate = getRate(targetCurrency, fromCurrency)
-                        LOG.info('Rate: 1' + fromCurrency + ' = ' + str(rate) + targetCurrency)
+                        LOG.info('Rate: 1' + targetCurrency + ' = ' + str(rate) + fromCurrency)
                         # Get EUR needed
                         fromAmount = currTargetBalance * rate
                         if fromAmount <= balances[fromCurrency]:
