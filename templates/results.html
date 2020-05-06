@@ -1,0 +1,89 @@
+<html>
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="../static/css/bootstrap.min.css">
+        <title>Currencies Converter</title>
+    </head>
+    <body>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm">
+                    
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm py-3">
+                                <b>Wallet Balances</b>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm py-3 px-3 border bg-light">
+                                USD
+                            </div>
+                            <div class="col-sm py-3 px-3 border bg-light">
+                                {{ balances['USD'] }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm py-3 px-3 border bg-light">
+                                EUR 
+                            </div>
+                            <div class="col-sm py-3 px-3 border bg-light">
+                                {{ balances['EUR'] }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm py-3 px-3 border bg-light">
+                                GBP
+                            </div>
+                            <div class="col-sm py-3 px-3 border bg-light">
+                                {{ balances['GBP'] }}
+                            </div>
+                        </div>
+                    </div>
+                
+                </div>
+                <div class="col-sm">
+                    
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm py-3">
+                                <b>Withdrawal Amount</b>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm py-3 px-3 border bg-light">
+                                {{ withdrawal_currency }}
+                            </div>
+                            <div class="col-sm py-3 px-3 border bg-light">
+                                {% if success %}
+                                    {{ withdrawal_amount }}
+                                {% else %}
+                                    0
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm py-3 px-3 two-div pull-right text-center">
+                    {% if success %}
+                        <button type="button" class="btn btn-success" disabled>Able to Withdraw</button>
+                    {% else %}
+                        <button type="button" class="btn btn-danger" disabled>Unable to Withdraw</button>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm py-3 px-3 two-div pull-right text-center">
+                    <a class="btn btn-dark" href="/" role="Button">Back</a>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

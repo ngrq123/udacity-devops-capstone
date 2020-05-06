@@ -1,0 +1,82 @@
+<html>
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="../static/css/bootstrap.min.css">
+        <title>Currency Converter</title>
+    </head>
+    <body>
+        <form action="/calculate" method="POST">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm">
+                        
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-sm py-3">
+                                    <b>Enter Wallet Balances</b>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm py-3 px-3 border bg-light">
+                                    USD
+                                </div>
+                                <div class="col-sm py-3 px-3 border bg-light">
+                                    <input name="usd-amt" id="usd-amt" type="number" value=100.00 />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm py-3 px-3 border bg-light">
+                                    EUR 
+                                </div>
+                                <div class="col-sm py-3 px-3 border bg-light">
+                                    <input name="eur-amt" id="eur-amt" type="number" value=70.00 />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm py-3 px-3 border bg-light">
+                                    GBP
+                                </div>
+                                <div class="col-sm py-3 px-3 border bg-light">
+                                    <input name="gbp-amt" id="gbp-amt" type="number" value=50.00 />
+                                </div>
+                            </div>
+                        </div>
+                    
+                    </div>
+                    <div class="col-sm">
+                        
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-sm py-3">
+                                    <b>Withdrawal Amount</b>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm py-3 px-3 border bg-light">
+                                    <select name="withdrawal-currency">
+                                        <option value="USD" selected>USD</option>
+                                        <option value="EUR">EUR</option>
+                                        <option value="GBP">GBP</option>
+                                    </select>
+                                </div>
+                                <div class="col-sm py-3 px-3 border bg-light">
+                                    <input name="withdrawal-amt" id="withdrawal-amt" type="number" value=50.00 />
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm py-3 px-3 two-div pull-right text-center">
+                        <input class="btn btn-dark" type="submit" value="Calculate" />
+                    </div>
+                </div>
+            </div>
+        </form>
+    </body>
+</html>
