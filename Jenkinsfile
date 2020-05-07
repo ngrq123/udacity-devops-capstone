@@ -28,7 +28,7 @@ pipeline {
                 withAWS(region:'us-west-2', credentials:'udacity-devops-capstone') {
                     cfnValidate(file:'infrastructure.yml')
                     script {
-                        def outputs = cfnUpdate(stack:'udacity-devops-capstone', file:'infrastructure.yml', onFailure:'ROLLBACK')
+                        def outputs = cfnUpdate(stack:'udacity-devops-capstone', file:'infrastructure.yml', onFailure:'ROLLBACK', timeoutInMinutes:30)
                         echo("$outputs")
                     }
                     echo("$outputs")
