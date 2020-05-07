@@ -51,7 +51,6 @@ pipeline {
         }
         stage('Deploy Docker Image to EKS') {
             steps {
-                echo("${outputs.LoadBalancerDNS}")
                 withAWS(region:'us-west-2', credentials:'udacity-devops-capstone') {
                 // withKubeConfig([credentialsId:'udacity-devops-capstone', serverUrl:'https://4A8A7D36D2C87B13BCAB3172B9313F7E.yl4.us-west-2.eks.amazonaws.com', clusterName:'udacity-devops-capstone-eks-cluster']) {
                     sh '''
@@ -59,7 +58,7 @@ pipeline {
                         kubectl delete pod udacity-devops-capstone --ignore-not-found=true
                         kubectl run udacity-devops-capstone --image 715480297167.dkr.ecr.us-west-2.amazonaws.com/udacity-devops-capstone:latest --port 80
                         kubectl get pods --all-namespaces
-                        kubectl wait --for=condition=Running udacity-devops-capstone --timeout=300s
+                        kubectl wait --for=condition=Running pod/udacity-devops-capstone --timeout=300s
                         kubectl port-forward udacity-devops-capstone 8000:80
                         kubectl logs udacity-devops-capstone
                     '''
