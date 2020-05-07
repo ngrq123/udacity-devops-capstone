@@ -56,6 +56,7 @@ pipeline {
                 // withKubeConfig([credentialsId:'udacity-devops-capstone', serverUrl:'https://4A8A7D36D2C87B13BCAB3172B9313F7E.yl4.us-west-2.eks.amazonaws.com', clusterName:'udacity-devops-capstone-eks-cluster']) {
                     sh '''
                         aws eks update-kubeconfig --name udacity-devops-capstone-eks-cluster
+                        kubectl delete pod udacity-devops-capstone --ignore-not-found=true
                         kubectl run udacity-devops-capstone --image 715480297167.dkr.ecr.us-west-2.amazonaws.com/udacity-devops-capstone:latest --port 80
                         kubectl get pods --all-namespaces
                         kubectl wait --for=condition=Running udacity-devops-capstone --timeout=300s
