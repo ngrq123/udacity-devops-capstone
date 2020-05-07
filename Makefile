@@ -1,6 +1,6 @@
 install:
 	# This should be run from inside a virtualenv
-	python -m pip install --upgrade pip
+	python3 -m pip install --upgrade pip
 	pip install -r requirements.txt
 
 test:
@@ -9,7 +9,7 @@ test:
 	#python -m pytest --nbval notebook.ipynb
 
 run:
-	python app.py
+	python3 app.py
 
 lint:
 	# See local hadolint install instructions:   https://github.com/hadolint/hadolint
