@@ -405,17 +405,3 @@ Resources:
                 - !Ref PublicSubnet2
         DependsOn:
             - KubernetesCluster
-
-Outputs: 
-
-    LoadBalancerDNS:
-        Description: The DNS Name of the Load Balancer
-        Value: !GetAtt KubernetesCluster.Endpoint
-        Export:
-            Name: !Sub ${EnvironmentName}-URL
-
-    # LoadBalancerDNS:
-    #     Description: The DNS Name of the Load Balancer
-    #     Value: !Join [ "", ["http://", !GetAtt LoadBalancer.DNSName]]
-    #     Export:
-    #         Name: !Sub ${EnvironmentName}-URL
