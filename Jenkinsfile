@@ -1,5 +1,3 @@
-def outputs
-
 pipeline {
     agent any
     stages {
@@ -30,7 +28,7 @@ pipeline {
                 withAWS(region:'us-west-2', credentials:'udacity-devops-capstone') {
                     cfnValidate(file:'infrastructure.yml')
                     script {
-                        outputs = cfnUpdate(stack:'udacity-devops-capstone', file:'infrastructure.yml', onFailure:'ROLLBACK', timeoutInMinutes:30)   
+                        cfnUpdate(stack:'udacity-devops-capstone', file:'infrastructure.yml', onFailure:'ROLLBACK', timeoutInMinutes:30)   
                     }
                 }
                 
@@ -54,14 +52,12 @@ pipeline {
                 // withKubeConfig([credentialsId:'udacity-devops-capstone', serverUrl:'https://4A8A7D36D2C87B13BCAB3172B9313F7E.yl4.us-west-2.eks.amazonaws.com', clusterName:'udacity-devops-capstone-eks-cluster']) {
                     sh '''
                         aws eks update-kubeconfig --name udacity-devops-capstone-eks-cluster
-                        kubectl delete pod udacity-devops-capstone --ignore-not-found=true
-                        kubectl run udacity-devops-capstone --image 715480297167.dkr.ecr.us-west-2.amazonaws.com/udacity-devops-capstone:latest --port 80
-                        kubectl get pods --all-namespaces
-                        kubectl wait --for=condition=Running pod/udacity-devops-capstone --timeout=600s
-                        kubectl port-forward udacity-devops-capstone 8000:80
-                        kubectl logs udacity-devops-capstone
+                        kubectl delete deployment udacity-devops-capstone --ignore-not-found=true
+                        kubectl delete service currency-converter --ignore-not-found=true
+                        kubectl create deployment udacity-devops-capstone --image=715480297167.dkr.ecr.us-west-2.amazonaws.com/udacity-devops-capstone:latest
+                        kubectl expose deployment udacity-devops-capstone --type=LoadBalancer --port=80 --name=currency-converter
+                        echo kubectl get services currency-converter -o jsonpath='{.status.loadBalancer.ingress[0].hostname}
                     '''
-                    echo("${outputs.LoadBalancerDNS}")
                 }
             }
         }
