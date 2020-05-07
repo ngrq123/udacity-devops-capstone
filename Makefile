@@ -1,11 +1,11 @@
 setup:
-	python3 -m venv .devops
-	. .devops/bin/activate
+	# python3 -m venv .devops
+	# . .devops/bin/activate
 
 install:
 	# This should be run from inside a virtualenv
-	python3 -m pip install --upgrade pip
-	pip3 install -r requirements.txt
+	python -m pip install --upgrade pip
+	pip install -r requirements.txt
 
 test:
 	# Additional, optional, tests could go here
