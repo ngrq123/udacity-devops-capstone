@@ -58,6 +58,7 @@ pipeline {
                         aws eks update-kubeconfig --name udacity-devops-capstone-eks-cluster
                         kubectl run udacity-devops-capstone --image 715480297167.dkr.ecr.us-west-2.amazonaws.com/udacity-devops-capstone:latest --port 80
                         kubectl get pods --all-namespaces
+                        kubectl wait --for=condition=Running udacity-devops-capstone --timeout=300s
                         kubectl port-forward udacity-devops-capstone 8000:80
                         kubectl logs udacity-devops-capstone
                     '''
