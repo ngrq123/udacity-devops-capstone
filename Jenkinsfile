@@ -51,13 +51,15 @@ pipeline {
             }
         }
         stage('Deploy Docker Image to EKS') {
-            withKubeConfig([credentialsId:'', serverUrl:'', clusterName:'udacity-devops-capstone-eks-cluster']) {
-                sh '''
-                    kubectl run udacity-devops-capstone --image 715480297167.dkr.ecr.us-west-2.amazonaws.com/udacity-devops-capstone:latest --port 80
-                    kubectl get pods --all-namespaces
-                    kubectl port-forward udacity-devops-capstone 8000:80
-                    kubectl logs udacity-devops-capstone
-                '''
+            steps {
+                withKubeConfig([credentialsId:'', serverUrl:'', clusterName:'udacity-devops-capstone-eks-cluster']) {
+                    sh '''
+                        kubectl run udacity-devops-capstone --image 715480297167.dkr.ecr.us-west-2.amazonaws.com/udacity-devops-capstone:latest --port 80
+                        kubectl get pods --all-namespaces
+                        kubectl port-forward udacity-devops-capstone 8000:80
+                        kubectl logs udacity-devops-capstone
+                    '''
+                }
             }
         }
     }
