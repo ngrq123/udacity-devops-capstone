@@ -4,7 +4,7 @@ pipeline {
         stage('Lint HTML and Python files') {
             steps {
                 sh '''
-                tidy -q -e *.html
+                tidy -q -e templates/*.html
                 make install
                 pylint --disable=R,C,W1203 app.py
                 '''
