@@ -30,8 +30,7 @@ pipeline {
                 withAWS(region:'us-west-2', credentials:'udacity-devops-capstone') {
                     cfnValidate(file:'infrastructure.yml')
                     script {
-                        outputs = cfnUpdate(stack:'udacity-devops-capstone', file:'infrastructure.yml', onFailure:'ROLLBACK', timeoutInMinutes:30)
-                        echo("${outputs}")
+                        outputs = cfnUpdate(stack:'udacity-devops-capstone', file:'infrastructure.yml', onFailure:'ROLLBACK', timeoutInMinutes:30)   
                     }
                 }
                 
@@ -58,10 +57,11 @@ pipeline {
                         kubectl delete pod udacity-devops-capstone --ignore-not-found=true
                         kubectl run udacity-devops-capstone --image 715480297167.dkr.ecr.us-west-2.amazonaws.com/udacity-devops-capstone:latest --port 80
                         kubectl get pods --all-namespaces
-                        kubectl wait --for=condition=Running pod/udacity-devops-capstone --timeout=300s
-                        kubectl port-forward udacity-devops-capstone 8000:80
+                        kubectl wait --for=condition=Running pod/udacity-devops-capstone --timeout=600s
+                        // kubectl port-forward udacity-devops-capstone 8000:80
                         kubectl logs udacity-devops-capstone
                     '''
+                    echo("${outputs.LoadBalancerDNS}")
                 }
             }
         }
