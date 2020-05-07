@@ -306,9 +306,9 @@ Resources:
                   ToPort: 65535
             SecurityGroupIngress:
                 - CidrIp: 0.0.0.0/0
-                  FromPort: 443
+                  FromPort: 0
                   IpProtocol: tcp
-                  ToPort: 443
+                  ToPort: 65535
             VpcId: !Ref VPC
 
     # LoadBalancerTargetGroup:
