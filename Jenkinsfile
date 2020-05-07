@@ -29,9 +29,8 @@ pipeline {
                     cfnValidate(file:'infrastructure.yml')
                     script {
                         def outputs = cfnUpdate(stack:'udacity-devops-capstone', file:'infrastructure.yml', onFailure:'ROLLBACK', timeoutInMinutes:30)
-                        // echo("$outputs")
+                        echo("$outputs")
                     }
-                    echo("$outputs")
                 }
                 
             }
