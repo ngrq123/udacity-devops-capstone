@@ -1,5 +1,3 @@
-def outputs
-
 pipeline {
     agent any
     stages {
@@ -24,11 +22,14 @@ pipeline {
         }
         stage('Create or Update Infrastructure') {
             steps {
-                withAWS(region:'us-west-2', credentials:'udacity-devops-capstone') {
-                    // cfnValidate(file:'infrastructure.yml')
-                    outputs = cfnUpdate(stack:'udacity-devops-capstone', file:'infrastructure.yml', onFailure:'ROLLBACK')
-                    echo("$outputs")
+                script {
+                    withAWS(region:'us-west-2', credentials:'udacity-devops-capstone') {
+                        cfnValidate(file:'infrastructure.yml')
+                        def outputs = cfnUpdate(stack:'udacity-devops-capstone', file:'infrastructure.yml', onFailure:'ROLLBACK')
+                        echo("$outputs")
+                    }
                 }
+                
             }
         }
         stage('Build and Push Docker Image') {
