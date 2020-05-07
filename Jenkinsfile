@@ -5,6 +5,7 @@ pipeline {
             steps {
                 sh '''
                 tidy -q -e templates/*.html
+                make setup
                 make install
                 pylint --disable=R,C,W1203 app.py
                 '''
