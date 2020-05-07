@@ -263,26 +263,42 @@ Resources:
             RouteTableId: !Ref PrivateRouteTable2
             SubnetId: !Ref PrivateSubnet2
 
-    LoadBalancerSecurityGroup:
-        Type: AWS::EC2::SecurityGroup
-        Properties:
-            GroupDescription: Security group for load balancer
-            SecurityGroupEgress: 
-                - CidrIp: 0.0.0.0/0
-                  FromPort: 80
-                  IpProtocol: tcp
-                  ToPort: 80
-            SecurityGroupIngress:
-                - CidrIp: 0.0.0.0/0
-                  FromPort: 80
-                  IpProtocol: tcp
-                  ToPort: 80
-            VpcId: !Ref VPC
+    # LoadBalancerSecurityGroup:
+    #     Type: AWS::EC2::SecurityGroup
+    #     Properties:
+    #         GroupDescription: Security group for load balancer
+    #         SecurityGroupEgress: 
+    #             - CidrIp: 0.0.0.0/0
+    #               FromPort: 80
+    #               IpProtocol: tcp
+    #               ToPort: 80
+    #         SecurityGroupIngress:
+    #             - CidrIp: 0.0.0.0/0
+    #               FromPort: 80
+    #               IpProtocol: tcp
+    #               ToPort: 80
+    #         VpcId: !Ref VPC
 
-    InstanceSecurityGroup:
+    # BastionHostSecurityGroup:
+    #     Type: AWS::EC2::SecurityGroup
+    #     Properties: 
+    #         GroupDescription: Security group for bastion hosts
+    #         SecurityGroupEgress: 
+    #             - CidrIp: 0.0.0.0/0
+    #               FromPort: 80
+    #               IpProtocol: tcp
+    #               ToPort: 80
+    #         SecurityGroupIngress:
+    #             - CidrIp: 0.0.0.0/0
+    #               FromPort: 80
+    #               IpProtocol: tcp
+    #               ToPort: 80
+    #         VpcId: !Ref VPC
+
+    ClusterSecurityGroup:
         Type: AWS::EC2::SecurityGroup
         Properties: 
-            GroupDescription: Security group for all EC2 instances
+            GroupDescription: Security group for EKS cluster
             SecurityGroupEgress: 
                 - CidrIp: 0.0.0.0/0
                   FromPort: 0
@@ -295,69 +311,69 @@ Resources:
                   ToPort: 80
             VpcId: !Ref VPC
 
-    LoadBalancerTargetGroup:
-        Type: AWS::ElasticLoadBalancingV2::TargetGroup
-        Properties:
-            HealthCheckEnabled: true
-            HealthCheckPort: 80
-            HealthCheckProtocol: HTTP
-            Port: 80
-            Protocol: HTTP
-            UnhealthyThresholdCount: 10
-            VpcId: !Ref VPC
+    # LoadBalancerTargetGroup:
+    #     Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    #     Properties:
+    #         HealthCheckEnabled: true
+    #         HealthCheckPort: 80
+    #         HealthCheckProtocol: HTTP
+    #         Port: 80
+    #         Protocol: HTTP
+    #         UnhealthyThresholdCount: 10
+    #         VpcId: !Ref VPC
 
-    AutoScalingLaunchConfiguration:
-        Type: AWS::AutoScaling::LaunchConfiguration
-        Properties:
-            ImageId: ami-003634241a8fcdec0
-            InstanceType: t2.micro
-            SecurityGroups: 
-                - !Ref InstanceSecurityGroup
+    # AutoScalingLaunchConfiguration:
+    #     Type: AWS::AutoScaling::LaunchConfiguration
+    #     Properties:
+    #         ImageId: ami-003634241a8fcdec0
+    #         InstanceType: t2.micro
+    #         SecurityGroups: 
+    #             - !Ref BastionHostSecurityGroup
 
-    AutoScalingGroup:
-        Type: AWS::AutoScaling::AutoScalingGroup
-        Properties:
-            LaunchConfigurationName: !Ref AutoScalingLaunchConfiguration
-            MaxSize: !Ref NumInstances
-            MinSize: 2
-            TargetGroupARNs: 
-                - !Ref LoadBalancerTargetGroup
-            VPCZoneIdentifier: 
-                - !Ref PublicSubnet1
-                - !Ref PublicSubnet2
+    # AutoScalingGroup:
+    #     Type: AWS::AutoScaling::AutoScalingGroup
+    #     Properties:
+    #         LaunchConfigurationName: !Ref AutoScalingLaunchConfiguration
+    #         MaxSize: !Ref NumInstances
+    #         MinSize: 2
+    #         TargetGroupARNs: 
+    #             - !Ref LoadBalancerTargetGroup
+    #         VPCZoneIdentifier: 
+    #             - !Ref PublicSubnet1
+    #             - !Ref PublicSubnet2
             
-    LoadBalancer:
-        Type: AWS::ElasticLoadBalancingV2::LoadBalancer
-        Properties:
-            SecurityGroups:
-                - !Ref LoadBalancerSecurityGroup
-            Subnets:
-                - !Ref PublicSubnet1
-                - !Ref PublicSubnet2
-            Type: application
+    # LoadBalancer:
+    #     Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    #     Properties:
+    #         SecurityGroups:
+    #             - !Ref LoadBalancerSecurityGroup
+    #         Subnets:
+    #             - !Ref PublicSubnet1
+    #             - !Ref PublicSubnet2
+    #         Type: application
 
-    LoadBalancerListener:
-        Type: AWS::ElasticLoadBalancingV2::Listener
-        Properties:
-            DefaultActions:
-                - TargetGroupArn: !Ref LoadBalancerTargetGroup
-                  Type: forward
-            LoadBalancerArn: !Ref LoadBalancer
-            Port: 80
-            Protocol: HTTP
+    # LoadBalancerListener:
+    #     Type: AWS::ElasticLoadBalancingV2::Listener
+    #     Properties:
+    #         DefaultActions:
+    #             - TargetGroupArn: !Ref LoadBalancerTargetGroup
+    #               Type: forward
+    #         LoadBalancerArn: !Ref LoadBalancer
+    #         Port: 80
+    #         Protocol: HTTP
 
-    LoadBalancerListenerRule:
-        Type: AWS::ElasticLoadBalancingV2::ListenerRule
-        Properties: 
-            Actions:
-                - TargetGroupArn: !Ref LoadBalancerTargetGroup
-                  Type: forward
-            Conditions:
-                - Field: path-pattern
-                  PathPatternConfig: 
-                      Values: [/]
-            ListenerArn: !Ref LoadBalancerListener
-            Priority: 1
+    # LoadBalancerListenerRule:
+    #     Type: AWS::ElasticLoadBalancingV2::ListenerRule
+    #     Properties: 
+    #         Actions:
+    #             - TargetGroupArn: !Ref LoadBalancerTargetGroup
+    #               Type: forward
+    #         Conditions:
+    #             - Field: path-pattern
+    #               PathPatternConfig: 
+    #                   Values: [/]
+    #         ListenerArn: !Ref LoadBalancerListener
+    #         Priority: 1
 
     KubernetesCluster:
         Type: AWS::EKS::Cluster
@@ -365,10 +381,10 @@ Resources:
             Name: udacity-devops-capstone-eks-cluster
             ResourcesVpcConfig:
                 SecurityGroupIds: 
-                    - !Ref InstanceSecurityGroup
+                    - !Ref ClusterSecurityGroup
                 SubnetIds:
-                - !Ref PrivateSubnet1
-                - !Ref PrivateSubnet2
+                - !Ref PublicSubnet1
+                - !Ref PublicSubnet2
             RoleArn: !GetAtt EKSClusterRole.Arn
 
     KubernetesNodeGroup:
@@ -385,8 +401,8 @@ Resources:
                 MaxSize: !Ref NumInstances
                 MinSize: 2
             Subnets: 
-                - !Ref PrivateSubnet1
-                - !Ref PrivateSubnet2
+                - !Ref PublicSubnet1
+                - !Ref PublicSubnet2
         DependsOn:
             - KubernetesCluster
 
@@ -394,6 +410,12 @@ Outputs:
 
     LoadBalancerDNS:
         Description: The DNS Name of the Load Balancer
-        Value: !Join [ "", ["http://", !GetAtt LoadBalancer.DNSName]]
+        Value: !GetAtt KubernetesCluster.Endpoint
         Export:
             Name: !Sub ${EnvironmentName}-URL
+
+    # LoadBalancerDNS:
+    #     Description: The DNS Name of the Load Balancer
+    #     Value: !Join [ "", ["http://", !GetAtt LoadBalancer.DNSName]]
+    #     Export:
+    #         Name: !Sub ${EnvironmentName}-URL
