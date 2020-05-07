@@ -56,7 +56,7 @@ pipeline {
                         kubectl delete service currency-converter --ignore-not-found=true
                         kubectl create deployment udacity-devops-capstone --image=715480297167.dkr.ecr.us-west-2.amazonaws.com/udacity-devops-capstone:latest
                         kubectl expose deployment udacity-devops-capstone --type=LoadBalancer --port=80 --name=currency-converter
-                        kubectl get services currency-converter -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'
+                        kubectl get services currency-converter -o jsonpath={.status.loadBalancer.ingress[0].hostname}
                     '''
                 }
             }
