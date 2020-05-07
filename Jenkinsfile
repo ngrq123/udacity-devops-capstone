@@ -25,7 +25,7 @@ pipeline {
         stage('Create or Update Infrastructure') {
             steps {
                 withAWS(region:'us-west-2', credentials:'udacity-devops-capstone') {
-                    cfnValidate(file:'infrastructure.yml')
+                    // cfnValidate(file:'infrastructure.yml')
                     outputs = cfnUpdate(stack:'udacity-devops-capstone', file:'infrastructure.yml', onFailure:'ROLLBACK')
                     echo("$outputs")
                 }
