@@ -36,23 +36,14 @@ pipeline {
             }
         }
         stage('Build and Push Docker Image') {
-            agent { dockerfile true }
-            stages {
-                stage('Authenticate') {
-                    steps {
-                        sh 'aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin 715480297167.dkr.ecr.us-west-2.amazonaws.com'
-                    }
-                }
-                stage('Build') {
-                    steps {
-                        sh 'docker build -t udacity-devops-capstone .'
-                        sh 'docker tag udacity-devops-capstone:latest 715480297167.dkr.ecr.us-west-2.amazonaws.com/udacity-devops-capstone:latest'
-                    }
-                }
-                stage('Push') {
-                    steps {
-                        sh 'docker push 715480297167.dkr.ecr.us-west-2.amazonaws.com/udacity-devops-capstone:latest'
-                    }
+            steps {
+                withAWS(region:'us-west-2', credentials:'udacity-devops-capstone') {
+                    sh '''
+                        aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin 715480297167.dkr.ecr.us-west-2.amazonaws.com
+                        docker build -t udacity-devops-capstone -f Dockerfile .
+                        docker tag udacity-devops-capstone:latest 715480297167.dkr.ecr.us-west-2.amazonaws.com/udacity-devops-capstone:latest
+                        docker push 715480297167.dkr.ecr.us-west-2.amazonaws.com/udacity-devops-capstone:latest
+                    '''
                 }
             }
         }
