@@ -58,7 +58,7 @@ pipeline {
                         kubectl expose deployment udacity-devops-capstone --type=LoadBalancer --port=80 --name=currency-converter
                     '''
                     script {
-                        def url = sh 'kubectl get services currency-converter -o jsonpath=\'{.status.loadBalancer.ingress[0].hostname}\''
+                        def url = sh(script: 'kubectl get services currency-converter -o jsonpath=\'{.status.loadBalancer.ingress[0].hostname}\'', returnStdout: true)
                         echo("${url}")
                     }
                 }
