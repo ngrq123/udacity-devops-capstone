@@ -374,7 +374,7 @@ Resources:
             RemoteAccess:
                 Ec2SshKey: udacity-devops-capstone
                 SourceSecurityGroups: 
-                    - !Ref 
+                    - !Ref BastionHostSecurityGroup
             Subnets: 
                 - !Ref PrivateSubnet1
                 - !Ref PrivateSubnet2
