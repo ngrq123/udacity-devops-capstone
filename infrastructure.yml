@@ -245,9 +245,9 @@ Resources:
                   ToPort: 65535
             SecurityGroupIngress:
                 - CidrIp: 0.0.0.0/0
-                  FromPort: 80
+                  FromPort: 0
                   IpProtocol: tcp
-                  ToPort: 80
+                  ToPort: 65535
             VpcId: !Ref VPC
 
     BastionHostSecurityGroup:
@@ -261,9 +261,9 @@ Resources:
                   ToPort: 65535
             SecurityGroupIngress:
                 - CidrIp: 0.0.0.0/0
-                  FromPort: 80
+                  FromPort: 0
                   IpProtocol: tcp
-                  ToPort: 80
+                  ToPort: 65535
             VpcId: !Ref VPC
 
     ClusterSecurityGroup:
