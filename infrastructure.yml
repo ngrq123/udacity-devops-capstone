@@ -36,9 +36,14 @@ Parameters:
         Default: udacity-devops-capstone-eks-cluster
     
     NumInstances:
-        Description: Number of instances at any point in time (minimum)
+        Description: The minimum number of instances at any point in time
         Type: String
         Default: 4
+
+    EC2SSHKey:
+        Description: The name of the EC2 SSH key
+        Type: String
+        Default: udacity-devops-capstone
     
 Resources:
 
@@ -298,6 +303,7 @@ Resources:
         Properties:
             ImageId: ami-003634241a8fcdec0
             InstanceType: t2.micro
+            KeyName: !Ref EC2SSHKey
             SecurityGroups: 
                 - !Ref BastionHostSecurityGroup
 
@@ -372,7 +378,7 @@ Resources:
                 MaxSize: !Ref NumInstances
                 MinSize: 2
             RemoteAccess:
-                Ec2SshKey: udacity-devops-capstone
+                Ec2SshKey: !Ref EC2SSHKey
                 SourceSecurityGroups: 
                     - !Ref BastionHostSecurityGroup
             Subnets: 
