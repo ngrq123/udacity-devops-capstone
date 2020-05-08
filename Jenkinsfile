@@ -1,7 +1,7 @@
 pipeline {
     agent any
     stages {
-        stage('Lint HTML and Python files') {
+        stage('Lint HTML and Python Files') {
             steps {
                 sh '''
                 tidy -q -e templates/*.html
@@ -13,7 +13,7 @@ pipeline {
                 '''
             }
         }
-        stage('Lint Docker file') {
+        stage('Lint Docker File') {
             agent {
                 docker {
                     image 'hadolint/hadolint:latest-debian'
@@ -21,6 +21,19 @@ pipeline {
             }
             steps {
                 sh 'hadolint Dockerfile'
+            }
+        }
+        stage('Create ECR, Build and Push Docker Image') {
+            steps {
+                withAWS(region:'us-west-2', credentials:'udacity-devops-capstone') {
+                    sh '''
+                        aws ecr describe-repositories --repository-names udacity-devops-capstone || aws ecr create-repository --repository-name udacity-devops-capstone
+                        aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin 715480297167.dkr.ecr.us-west-2.amazonaws.com
+                        docker build -t udacity-devops-capstone -f Dockerfile .
+                        docker tag udacity-devops-capstone:latest 715480297167.dkr.ecr.us-west-2.amazonaws.com/udacity-devops-capstone:latest
+                        docker push 715480297167.dkr.ecr.us-west-2.amazonaws.com/udacity-devops-capstone:latest
+                    '''
+                }
             }
         }
         stage('Create or Update Infrastructure') {
@@ -34,18 +47,6 @@ pipeline {
                 
             }
         }
-        stage('Build and Push Docker Image') {
-            steps {
-                withAWS(region:'us-west-2', credentials:'udacity-devops-capstone') {
-                    sh '''
-                        aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin 715480297167.dkr.ecr.us-west-2.amazonaws.com
-                        docker build -t udacity-devops-capstone -f Dockerfile .
-                        docker tag udacity-devops-capstone:latest 715480297167.dkr.ecr.us-west-2.amazonaws.com/udacity-devops-capstone:latest
-                        docker push 715480297167.dkr.ecr.us-west-2.amazonaws.com/udacity-devops-capstone:latest
-                    '''
-                }
-            }
-        }
         stage('Deploy Docker Image to EKS') {
             steps {
                 withAWS(region:'us-west-2', credentials:'udacity-devops-capstone') {
@@ -56,7 +57,6 @@ pipeline {
                         kubectl delete service currency-converter --ignore-not-found=true
                         kubectl create deployment udacity-devops-capstone --image=715480297167.dkr.ecr.us-west-2.amazonaws.com/udacity-devops-capstone:latest
                         kubectl expose deployment udacity-devops-capstone --type=LoadBalancer --port=80 --name=currency-converter
-                        kubectl get services currency-converter
                     '''
                 }
             }
