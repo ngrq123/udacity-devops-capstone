@@ -74,35 +74,6 @@ Resources:
                 - arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy
                 - arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly
 
-    DockerContainerRepository:
-        Type: AWS::ECR::Repository
-        Properties: 
-            RepositoryName: udacity-devops-capstone
-            RepositoryPolicyText: 
-                {
-                    "Version": "2008-10-17",
-                    "Statement": [
-                        {
-                            "Sid": "AllowPushPull",
-                            "Effect": "Allow",
-                            "Principal": {
-                                "AWS": [
-                                    !Ref DockerContainerPushPullUser
-                                ]
-                            },
-                            "Action": [
-                                "ecr:GetDownloadUrlForLayer",
-                                "ecr:BatchGetImage",
-                                "ecr:BatchCheckLayerAvailability",
-                                "ecr:PutImage",
-                                "ecr:InitiateLayerUpload",
-                                "ecr:UploadLayerPart",
-                                "ecr:CompleteLayerUpload"
-                            ]
-                        }
-                    ]
-                }
-
     VPC:
         Type: AWS::EC2::VPC
         Properties: 
@@ -383,8 +354,8 @@ Resources:
                 SecurityGroupIds: 
                     - !Ref ClusterSecurityGroup
                 SubnetIds:
-                - !Ref PublicSubnet1
-                - !Ref PublicSubnet2
+                - !Ref PrivateSubnet1
+                - !Ref PrivateSubnet2
             RoleArn: !GetAtt EKSClusterRole.Arn
 
     KubernetesNodeGroup:
@@ -401,7 +372,7 @@ Resources:
                 MaxSize: !Ref NumInstances
                 MinSize: 2
             Subnets: 
-                - !Ref PublicSubnet1
-                - !Ref PublicSubnet2
+                - !Ref PrivateSubnet1
+                - !Ref PrivateSubnet2
         DependsOn:
             - KubernetesCluster
