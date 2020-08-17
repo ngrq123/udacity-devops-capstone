@@ -53,10 +53,16 @@ pipeline {
                 // withKubeConfig([credentialsId:'udacity-devops-capstone', serverUrl:'https://4A8A7D36D2C87B13BCAB3172B9313F7E.yl4.us-west-2.eks.amazonaws.com', clusterName:'udacity-devops-capstone-eks-cluster']) {
                     sh '''
                         aws eks update-kubeconfig --name udacity-devops-capstone-eks-cluster
-                        kubectl delete deployment udacity-devops-capstone --ignore-not-found=true
-                        kubectl delete service currency-converter --ignore-not-found=true
-                        kubectl create deployment udacity-devops-capstone --image=715480297167.dkr.ecr.us-west-2.amazonaws.com/udacity-devops-capstone:latest
-                        kubectl expose deployment udacity-devops-capstone --type=LoadBalancer --port=80 --name=currency-converter
+                        
+                        // kubectl delete deployment udacity-devops-capstone --ignore-not-found=true
+                        // kubectl delete service currency-converter --ignore-not-found=true
+                        
+                        // Update image, or, create and expose deployment
+                        kubectl set image deployment/udacity-devops-capstone udacity-devops-capstone=715480297167.dkr.ecr.us-west-2.amazonaws.com/udacity-devops-capstone:latest || \
+                        (
+                            kubectl create deployment udacity-devops-capstone --image=715480297167.dkr.ecr.us-west-2.amazonaws.com/udacity-devops-capstone:latest
+                            kubectl expose deployment udacity-devops-capstone --type=LoadBalancer --port=80 --name=currency-converter
+                        )
                     '''
                 }
             }
