@@ -1,2 +1,5 @@
 .devops
 my_password.txt
+create.sh
+delete.sh
+update.sh
