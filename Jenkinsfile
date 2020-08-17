@@ -54,10 +54,10 @@ pipeline {
                     sh '''
                         aws eks update-kubeconfig --name udacity-devops-capstone-eks-cluster
                         
-                        // kubectl delete deployment udacity-devops-capstone --ignore-not-found=true
-                        // kubectl delete service currency-converter --ignore-not-found=true
+                        # kubectl delete deployment udacity-devops-capstone --ignore-not-found=true
+                        # kubectl delete service currency-converter --ignore-not-found=true
                         
-                        // Update image, or, create and expose deployment
+                        # Update image, or, create and expose deployment
                         kubectl set image deployment/udacity-devops-capstone udacity-devops-capstone=715480297167.dkr.ecr.us-west-2.amazonaws.com/udacity-devops-capstone:latest || \
                         (
                             kubectl create deployment udacity-devops-capstone --image=715480297167.dkr.ecr.us-west-2.amazonaws.com/udacity-devops-capstone:latest
