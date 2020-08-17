@@ -4,7 +4,6 @@ FROM python:3.7.3-stretch
 # Create a working directory
 WORKDIR /app
 
-demonstratefailedlinting
 ## Step 2:
 # Copy source code to working directory
 COPY . app.py /app/
