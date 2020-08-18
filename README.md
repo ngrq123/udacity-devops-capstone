@@ -1,3 +1,5 @@
+_GitHub URL: https://github.com/ngrq123/udacity-devops-capstone_
+
 # Udacity Cloud DevOps Engineer Nanodegree Capstone
 
 A currency converter application built with the Python Flask framework and dockerised into a Docker container that is pushed to AWS Elastic Container Registry (ECR). The container is then pulled and deployed by nodes in an AWS Elastic Kubernetes Service (EKS) cluster.
